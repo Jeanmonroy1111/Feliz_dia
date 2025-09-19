@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Feliz día del Amor y la Amistad 🌸</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    canvas {
+      position: absolute;
+      top: 0; left: 0;
+    }
+    h1 {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      font-size: 2em;
+      color: pink;
+      text-shadow: 0 0 10px red, 0 0 20px hotpink;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌹 Feliz Día del Amor y la Amistad 💖</h1>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let h = 0;
+    function drawFlower() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+
+      for (let i = 0; i < 16; i++) {
+        for (let j = 0; j < 18; j++) {
+          let radius = 150 - j * 6;
+          ctx.strokeStyle = `hsl(${(h + j*10) % 360}, 90%, 60%)`;
+          ctx.beginPath();
+          ctx.arc(0, 0, radius, 0, Math.PI / 2);
+          ctx.stroke();
+          ctx.rotate(Math.PI / 2);
+        }
+        ctx.rotate(Math.PI / 12);
+      }
+
+      ctx.restore();
+      h += 2;
+      requestAnimationFrame(drawFlower);
+    }
+
+    drawFlower();
+  </script>
+</body>
+</html>
