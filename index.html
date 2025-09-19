@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Flor Animada </title>
+  <title>Flor Animada 🌸</title>
   <style>
     body {
       margin: 0;
@@ -26,7 +26,7 @@
   </style>
 </head>
 <body>
-  <h1> Feliz Día del Amor y la Amistad </h1>
+  <h1>💖 Feliz Día del Amor y la Amistad 💖</h1>
   <canvas id="canvas"></canvas>
 
   <script>
@@ -35,35 +35,66 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let h = 0;
+    // --- Simulación de Turtle ---
+    let x = canvas.width / 2;
+    let y = canvas.height / 2;
+    let heading = 0; // ángulo en radianes
 
-    function drawCircle(radius, startAngle, endAngle) {
-      ctx.beginPath();
-      ctx.arc(0, 0, radius, startAngle, endAngle);
-      ctx.stroke();
+    function forward(dist) {
+      let newX = x + Math.cos(heading) * dist;
+      let newY = y + Math.sin(heading) * dist;
+      ctx.lineTo(newX, newY);
+      x = newX;
+      y = newY;
     }
 
+    function right(angleDeg) {
+      heading += (angleDeg * Math.PI) / 180;
+    }
+
+    function left(angleDeg) {
+      heading -= (angleDeg * Math.PI) / 180;
+    }
+
+    function goto(nx, ny) {
+      x = nx;
+      y = ny;
+      ctx.moveTo(x, y);
+    }
+
+    // Dibuja un arco al estilo turtle.circle(r, extent)
+    function circle(r, extent) {
+      let steps = Math.floor(Math.abs(extent));
+      let stepLen = (2 * Math.PI * r) / 360; // aproximación por grado
+      let stepAng = (extent > 0 ? 1 : -1);
+      for (let i = 0; i < steps; i++) {
+        right(stepAng);
+        forward(stepLen);
+      }
+    }
+
+    // --- Animación ---
+    let h = 0;
     function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.lineWidth = 1.5;
+      ctx.fillStyle = "rgba(0,0,0,0.1)"; // rastro suave
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.beginPath();
+      goto(canvas.width / 2, canvas.height / 2);
+      heading = 0;
 
       for (let i = 0; i < 16; i++) {
         for (let j = 0; j < 18; j++) {
-          let radius = 150 - j * 6;
           ctx.strokeStyle = `hsl(${(h * 360) % 360}, 90%, 60%)`;
-
-          // simula los arcos de turtle.circle(..., 90)
-          drawCircle(radius, 0, Math.PI / 2);
-          ctx.rotate(Math.PI / 2);
-          drawCircle(radius, 0, Math.PI / 2);
-          ctx.rotate(Math.PI);
+          circle(150 - j * 6, 90);
+          left(90);
+          circle(150 - j * 6, 90);
+          right(180);
         }
-        ctx.rotate((24 * Math.PI) / 180); // circle(40, 24) ≈ rotación
+        circle(40, 24);
       }
 
-      ctx.restore();
+      ctx.stroke();
       h += 0.005;
       requestAnimationFrame(draw);
     }
@@ -72,3 +103,4 @@
   </script>
 </body>
 </html>
+
